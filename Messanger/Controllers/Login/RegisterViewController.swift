@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseAuth
+
 
 class RegisterViewController: UIViewController {
     // MARK: - UIFIELD
@@ -18,24 +20,27 @@ class RegisterViewController: UIViewController {
    
    private let imageView: UIImageView = {
        let imageView = UIImageView()
-       imageView.image=UIImage(systemName: "person")
+       imageView.image=UIImage(systemName: "person.circle")
        imageView.tintColor = .gray
        imageView.contentMode = .scaleAspectFit
        imageView.layer.masksToBounds = true
-       imageView.layer.borderWidth = 2
-       imageView.layer.borderColor = UIColor.lightGray.cgColor
+//       imageView.layer.borderWidth = 2
+//       imageView.layer.borderColor = UIColor.lightGray.cgColor
        return imageView
    }()
    
    private let emailField : UITextField = {
       let field = UITextField()
+       field.textColor = .black
        field.autocapitalizationType = .none
        field.autocorrectionType = .no
        field.returnKeyType = .continue
        field.layer.cornerRadius = 12
        field.layer.borderWidth = 1
        field.layer.borderColor = UIColor.lightGray.cgColor
-       field.placeholder = "Email Address..."
+       let placeholderText = NSAttributedString(string: "Email Address",
+                                                           attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+       field.attributedPlaceholder = placeholderText
        field.leftView = UIView (frame: CGRect(x: 0, y: 0, width: 5, height: 0))
        field.leftViewMode = .always
        field.backgroundColor = .white
@@ -44,13 +49,16 @@ class RegisterViewController: UIViewController {
    
    private let passwordField : UITextField = {
       let field = UITextField()
+       field.textColor = .black
        field.autocapitalizationType = .none
        field.autocorrectionType = .no
        field.returnKeyType = .continue
        field.layer.cornerRadius = 12
        field.layer.borderWidth = 1
        field.layer.borderColor = UIColor.lightGray.cgColor
-       field.placeholder = "Password..."
+       let placeholderText = NSAttributedString(string: "Password",
+                                                           attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+       field.attributedPlaceholder = placeholderText
        field.leftView = UIView (frame: CGRect(x: 0, y: 0, width: 5, height: 0))
        field.leftViewMode = .always
        field.backgroundColor = .white
@@ -60,13 +68,16 @@ class RegisterViewController: UIViewController {
     
     private let firstNameField : UITextField = {
        let field = UITextField()
+        field.textColor = .black
         field.autocapitalizationType = .none
         field.autocorrectionType = .no
         field.returnKeyType = .continue
         field.layer.cornerRadius = 12
         field.layer.borderWidth = 1
         field.layer.borderColor = UIColor.lightGray.cgColor
-        field.placeholder = "First Name..."
+        let placeholderText = NSAttributedString(string: "First Name",
+                                                            attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+        field.attributedPlaceholder = placeholderText
         field.leftView = UIView (frame: CGRect(x: 0, y: 0, width: 5, height: 0))
         field.leftViewMode = .always
         field.backgroundColor = .white
@@ -75,13 +86,16 @@ class RegisterViewController: UIViewController {
     
     private let lastNameField : UITextField = {
        let field = UITextField()
+        field.textColor = .black
         field.autocapitalizationType = .none
         field.autocorrectionType = .no
         field.returnKeyType = .done
         field.layer.cornerRadius = 12
         field.layer.borderWidth = 1
         field.layer.borderColor = UIColor.lightGray.cgColor
-        field.placeholder = "Last Name..."
+        let placeholderText = NSAttributedString(string: "Last Name",
+                                                            attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+        field.attributedPlaceholder = placeholderText
         field.leftView = UIView (frame: CGRect(x: 0, y: 0, width: 5, height: 0))
         field.leftViewMode = .always
         field.backgroundColor = .white
@@ -113,8 +127,10 @@ class RegisterViewController: UIViewController {
                              action: #selector(registerButtonTapped),
                              for: .touchUpInside)
        
-       emailField.delegate = self.emailField.delegate
-       passwordField.delegate = self.passwordField.delegate
+       emailField.delegate = self
+       passwordField.delegate = self
+       firstNameField.delegate = self
+       lastNameField.delegate = self
        
        
         // MARK: - ADD SUBVIEW
@@ -196,13 +212,43 @@ class RegisterViewController: UIViewController {
                  return
              }
        
-       
+       DatabaseManager.shared.userExists(with: email, completion: { [weak self] exists in
+           guard let strongSelf = self else {
+               return
+           }
+           
+           guard !exists else {
+               //user already exists
+               strongSelf.alertUserRegisterError(message: "Looks like a user account for that email address already exists.")
+               return
+               
+           }
+           
+           
+           FirebaseAuth.Auth.auth().createUser(withEmail: email,
+                                               password: password,
+                                               completion: { authResult, error in
+               
+             
+               guard authResult != nil , error == nil else {
+                   print("Error creating user")
+                   return
+               }
+              
+               DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName,
+                                                                   lastName: lastrName,
+                                                                   emailAddress: email))
+               
+               strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+               
+           })
+       })
    }
    
-   func alertUserRegisterError(){
+    func alertUserRegisterError(message : String = "Please enter all information to create a new account" ){
        
        let alert = UIAlertController(title: "Woops",
-                                     message: "Please enter all information to create a new account",
+                                     message: message,
                                      preferredStyle: .alert)
        
        alert.addAction(UIAlertAction(title: "Dismiss",
@@ -219,7 +265,8 @@ class RegisterViewController: UIViewController {
    }
 }
 
-extension RegisterViewController : UITextViewDelegate {
+extension RegisterViewController : UITextFieldDelegate {
+    
     
     func textFieldShouldReturn(_ textField : UITextField) -> Bool {
         
@@ -227,6 +274,12 @@ extension RegisterViewController : UITextViewDelegate {
             passwordField.becomeFirstResponder()
         }
         else if textField == passwordField {
+            firstNameField.becomeFirstResponder()
+        }
+        else if textField == firstNameField {
+            lastNameField.becomeFirstResponder()
+        }
+        else if textField == lastNameField {
             registerButtonTapped()
         }
         
