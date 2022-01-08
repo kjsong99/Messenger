@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseAuth
 import FBSDKLoginKit
+import GoogleSignIn
 
 class LoginViewController: UIViewController {
     
@@ -79,19 +80,36 @@ class LoginViewController: UIViewController {
     
     private let fbLoginButton : FBLoginButton = {
         let fbLoginButton = FBLoginButton()
-        fbLoginButton.permissions = ["public_profile", "email"]
+        fbLoginButton.permissions = ["public_profile", "email", "user_birthday"]
         fbLoginButton.layer.cornerRadius = 12
         fbLoginButton.layer.masksToBounds = true
         fbLoginButton.titleLabel?.font = .systemFont(ofSize: 20 , weight : .bold)
         return fbLoginButton
     }()
     
+    private let googleLoginButton  = GIDSignInButton()
     
     
     
+    private var loginObserver : NSObjectProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        loginObserver = NotificationCenter.default.addObserver(forName: .didLoginNotification,
+                                               object: nil,
+                                               queue: .main,
+                                               using: { [weak self] _ in
+            guard let strongSelf = self else {
+                return
+            }
+            
+            strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+        })
+        
+        
+        GIDSignIn.sharedInstance()?.presentingViewController = self
+        
         title = "Log In"
         view.backgroundColor = .white
         
@@ -116,7 +134,14 @@ class LoginViewController: UIViewController {
         scrollView.addSubview(passwordField)
         scrollView.addSubview(loginButton)
         scrollView.addSubview(fbLoginButton)
+        scrollView.addSubview(googleLoginButton)
         
+    }
+    
+    deinit {
+        if let observer = loginObserver {
+            NotificationCenter.default.removeObserver(loginObserver)
+        }
     }
     
     override func viewDidLayoutSubviews(){
@@ -148,6 +173,13 @@ class LoginViewController: UIViewController {
                                      width: scrollView.width-60 ,
                                      height: 52)
         fbLoginButton.layer.cornerRadius = 12
+        
+        googleLoginButton.frame = CGRect(x: 30,
+                                     y: fbLoginButton.bottom+10 ,
+                                     width: scrollView.width-60 ,
+                                     height: 52)
+        googleLoginButton.layer.cornerRadius = 12
+        
         //        fbLoginButton.frame.origin.y = loginButton.bottom + 20
         
     }
@@ -229,7 +261,7 @@ extension LoginViewController : LoginButtonDelegate{
         }
         
         let facebookRequest = FBSDKLoginKit.GraphRequest(graphPath: "me",
-                                                         parameters: ["fields" : "email, name"],
+                                                         parameters: ["fields" : "email, name, birthday"],
                                                          tokenString: token,
                                                          version: nil,
                                                          httpMethod: .get)
@@ -241,32 +273,39 @@ extension LoginViewController : LoginButtonDelegate{
             }
             
             print("\(result)")
+            print(type(of: result["birth"]))
             
             guard let userName = result["name"] as? String,
+                  let birth = result["birthday"] as? String,
                   let email = result["email"] as? String else {
                       print("Failed to get email and name from fb result")
                       return
                   }
-            
-            var firstIndex = userName.index(userName.startIndex, offsetBy: 0)
-            var lastIndex = userName.index(userName.startIndex, offsetBy: 1)
-            
-            let lastName = userName[firstIndex..<lastIndex]
-            
-             firstIndex = userName.index(userName.startIndex, offsetBy: 1)
-             lastIndex = userName.index(userName.startIndex, offsetBy: 3)
-            
-            let firstName = userName[firstIndex..<lastIndex]
-            
-            print("last name : \(lastName)")
-            print("first name : \(firstName)")
+//
+//            let formatter = DateFormatter()
+//            formatter.dateFormat = "YYYY-mm-dd"
+//
+//            let birth = formatter.string(from: result["birth"] as! Date)
+                    
+//            var firstIndex = userName.index(userName.startIndex, offsetBy: 0)
+//            var lastIndex = userName.index(userName.startIndex, offsetBy: 1)
+//
+//            let lastName = userName[firstIndex..<lastIndex]
+//
+//             firstIndex = userName.index(userName.startIndex, offsetBy: 1)
+//             lastIndex = userName.index(userName.startIndex, offsetBy: 3)
+//
+//            let firstName = userName[firstIndex..<lastIndex]
+//
+//            print("last name : \(lastName)")
+//            print("first name : \(firstName)")
             
             DatabaseManager.shared.userExists(with: email, completion: { exists in
 
                 if !exists {
-                    //insert user
-                    DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: String(firstName),
-                                                                        lastName: String(lastName),
+//                    //insert user
+                    DatabaseManager.shared.insertUser(with: ChatAppUser(name: userName,
+                                                                        birth: birth,
                                                                         emailAddress: email))
                 }
             })
