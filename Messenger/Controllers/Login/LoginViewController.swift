@@ -213,6 +213,7 @@ class LoginViewController: UIViewController {
             }
             
             let user = result.user
+            UserDefaults.standard.set(email, forKey: "email")
             print("Logged in user! \(user)")
             strongSelf.navigationController?.dismiss(animated: true, completion: nil)
         })
@@ -283,7 +284,6 @@ extension LoginViewController : LoginButtonDelegate{
             }
             
             print("\(result)")
-            print(type(of: result["birth"]))
             
             guard let userName = result["name"] as? String,
                   let birth = result["birthday"] as? String,
@@ -294,24 +294,8 @@ extension LoginViewController : LoginButtonDelegate{
                       print("Failed to get email and name from fb result")
                       return
                   }
-            //
-            //            let formatter = DateFormatter()
-            //            formatter.dateFormat = "YYYY-mm-dd"
-            //
-            //            let birth = formatter.string(from: result["birth"] as! Date)
             
-            //            var firstIndex = userName.index(userName.startIndex, offsetBy: 0)
-            //            var lastIndex = userName.index(userName.startIndex, offsetBy: 1)
-            //
-            //            let lastName = userName[firstIndex..<lastIndex]
-            //
-            //             firstIndex = userName.index(userName.startIndex, offsetBy: 1)
-            //             lastIndex = userName.index(userName.startIndex, offsetBy: 3)
-            //
-            //            let firstName = userName[firstIndex..<lastIndex]
-            //
-            //            print("last name : \(lastName)")
-            //            print("first name : \(firstName)")
+           
             
             DatabaseManager.shared.userExists(with: email, completion: { exists in
                 
@@ -357,6 +341,8 @@ extension LoginViewController : LoginButtonDelegate{
                 }
             })
             
+         
+            
             
             
             let credential = FacebookAuthProvider.credential(withAccessToken: token)
@@ -374,6 +360,7 @@ extension LoginViewController : LoginButtonDelegate{
                 }
                 
                 print("Successfully logged user in")
+                UserDefaults.standard.set(email, forKey: "email")
                 strongSelf.navigationController?.dismiss(animated: true, completion: nil)
                 
             })
