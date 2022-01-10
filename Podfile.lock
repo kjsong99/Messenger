@@ -25,6 +25,9 @@ PODS:
   - Firebase/Database (8.10.0):
     - Firebase/CoreOnly
     - FirebaseDatabase (~> 8.10.0)
+  - Firebase/Storage (8.10.0):
+    - Firebase/CoreOnly
+    - FirebaseStorage (~> 8.10.0)
   - FirebaseAnalytics (8.10.0):
     - FirebaseAnalytics/AdIdSupport (= 8.10.0)
     - FirebaseCore (~> 8.0)
@@ -65,6 +68,9 @@ PODS:
     - GoogleUtilities/Environment (~> 7.6)
     - GoogleUtilities/UserDefaults (~> 7.6)
     - PromisesObjC (< 3.0, >= 1.2)
+  - FirebaseStorage (8.10.0):
+    - FirebaseCore (~> 8.0)
+    - GTMSessionFetcher/Core (~> 1.5)
   - GoogleAppMeasurement (8.10.0):
     - GoogleAppMeasurement/AdIdSupport (= 8.10.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.6)
@@ -116,13 +122,27 @@ PODS:
     - AppAuth/Core (~> 1.4)
     - GTMSessionFetcher/Core (~> 1.5)
   - GTMSessionFetcher/Core (1.7.0)
+  - InputBarAccessoryView (5.4.0):
+    - InputBarAccessoryView/Core (= 5.4.0)
+  - InputBarAccessoryView/Core (5.4.0)
+  - JGProgressHUD (2.2)
   - leveldb-library (1.22.1)
+  - MessageKit (3.7.0):
+    - InputBarAccessoryView (~> 5.4.0)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
   - PromisesObjC (2.0.0)
+  - Realm (10.20.1):
+    - Realm/Headers (= 10.20.1)
+  - Realm/Headers (10.20.1)
+  - RealmSwift (10.20.1):
+    - Realm (= 10.20.1)
+  - SDWebImage (5.12.2):
+    - SDWebImage/Core (= 5.12.2)
+  - SDWebImage/Core (5.12.2)
 
 DEPENDENCIES:
   - FBSDKCoreKit
@@ -131,7 +151,12 @@ DEPENDENCIES:
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
+  - Firebase/Storage
   - GoogleSignIn (~> 5.0.2)
+  - JGProgressHUD
+  - MessageKit
+  - RealmSwift
+  - SDWebImage
 
 SPEC REPOS:
   trunk:
@@ -148,15 +173,22 @@ SPEC REPOS:
     - FirebaseCoreDiagnostics
     - FirebaseDatabase
     - FirebaseInstallations
+    - FirebaseStorage
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleSignIn
     - GoogleUtilities
     - GTMAppAuth
     - GTMSessionFetcher
+    - InputBarAccessoryView
+    - JGProgressHUD
     - leveldb-library
+    - MessageKit
     - nanopb
     - PromisesObjC
+    - Realm
+    - RealmSwift
+    - SDWebImage
 
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
@@ -172,16 +204,23 @@ SPEC CHECKSUMS:
   FirebaseCoreDiagnostics: 56fb7216d87e0e6ec2feddefa9d8a392fe8b2c18
   FirebaseDatabase: 5f3e83b0a0d8759378fbd5d05661244d14dfbbb0
   FirebaseInstallations: 830327b45345ffc859eaa9c17bcd5ae893fd5425
+  FirebaseStorage: 815410224b548172c578f02554a86bbc8f817f50
   GoogleAppMeasurement: a3311dbcf3ea651e5a070fe8559b57c174ada081
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
   GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
+  InputBarAccessoryView: 74d471ab1fa1736806be50328df79257e52865a9
+  JGProgressHUD: d83d7a981b85d11205e19ff8ad5bb9c40571c847
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
+  MessageKit: 8e76dd8d65ad44b49e1651c673497146416461e9
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
+  Realm: fac5ecd031fcb81171627b74944c885662d4b266
+  RealmSwift: 9b02d25acb46a14756bde9893abb99e2e3675923
+  SDWebImage: 240e5c12b592fb1268c1d03b8c90d90e8c2ffe82
 
-PODFILE CHECKSUM: 24e769b09d5f78e35942fd616b451f71b6de114d
+PODFILE CHECKSUM: 66104d2d776be1ab98edacf7164e032cf0de3930
 
 COCOAPODS: 1.11.2
