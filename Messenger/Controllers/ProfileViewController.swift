@@ -8,6 +8,7 @@ import UIKit
 import FirebaseAuth
 import FBSDKLoginKit
 import GoogleSignIn
+import SDWebImage
 
 class ProfileViewController: UIViewController {
     
@@ -29,12 +30,13 @@ class ProfileViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+        tableView.tableHeaderView = createTableHeader()
         
         
         let user = UserDefaults.standard.value(forKey: "email")
         print("Current user \(user)")
         
-        tableView.tableHeaderView = createTableHeader()
+     
     }
     
     func createTableHeader() -> UIView? {
@@ -92,7 +94,9 @@ class ProfileViewController: UIViewController {
                   }
             DispatchQueue.main.async {
                 let image = UIImage(data: data)
-                imageView.image = image
+//                imageView.image = image
+                
+                imageView.sd_setImage(with: url, completed: nil)
             }
             
         }).resume()
