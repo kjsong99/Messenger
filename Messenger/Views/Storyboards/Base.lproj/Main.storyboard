@@ -11,7 +11,7 @@
         <!--Chats-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ConversationsViewController" customModule="Messanger" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ConversationsViewController" customModule="Messenger" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -64,7 +64,6 @@
         <!--Profile-->
         <scene sceneID="yfr-CY-LuW">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="BSN-2e-0wD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <navigationController id="Ruf-wk-LNC" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Profile" id="4SZ-R5-mb7"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="2yX-EF-Vme">
@@ -75,19 +74,20 @@
                         <segue destination="Ypr-U8-5og" kind="relationship" relationship="rootViewController" id="ob7-5p-4rB"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BSN-2e-0wD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1619" y="384"/>
         </scene>
         <!--Profile-->
         <scene sceneID="VXK-7x-GvR">
             <objects>
-                <viewController id="Ypr-U8-5og" customClass="ProfileViewController" customModule="Messanger" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Ypr-U8-5og" customClass="ProfileViewController" customModule="Messenger" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UNj-2c-bBk" customClass="ProfileView">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="YDE-cI-cPT">
-                                <rect key="frame" x="0.0" y="96" width="375" height="522"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="YDE-cI-cPT">
+                                <rect key="frame" x="0.0" y="96" width="375" height="571"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
@@ -100,14 +100,14 @@
                             <constraint firstItem="YDE-cI-cPT" firstAttribute="leading" secondItem="3vF-rP-2SW" secondAttribute="leading" id="uJe-b0-FYm"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Profile" id="jgJ-Uk-iT6"/>
+                    <navigationItem key="navigationItem" title="Profile" largeTitleDisplayMode="always" id="jgJ-Uk-iT6"/>
                     <connections>
                         <outlet property="tableView" destination="YDE-cI-cPT" id="OU5-Ul-E92"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZK4-wr-Dvu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1557" y="1114"/>
+            <point key="canvasLocation" x="-1557.5999999999999" y="1113.1934032983509"/>
         </scene>
     </scenes>
     <resources>
