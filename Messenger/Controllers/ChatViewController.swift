@@ -125,6 +125,7 @@ extension ChatViewController : InputBarAccessoryViewDelegate {
                                   sentDate: Date(),
                                   kind: .text(text))
             DatabaseManager.shared.creteNewConversation(with: otherUserEmail,
+                                                        name: self.title ?? "User",
                                                         firstMessage: message,
                                                         completion: { success in
                 if success {
@@ -153,6 +154,8 @@ extension ChatViewController : InputBarAccessoryViewDelegate {
         
         let dateString = Self.dateFormatter.string(from: Date())
         let newIdentifier = "\(otherUserEmail)_\(safeCurrentEmail)_\(dateString)"
+//        let newIdentifier = "\(otherUserEmail)_\(safeCurrentEmail)"
+
         print("created message id : \(newIdentifier)")
         return newIdentifier
     }
