@@ -21,7 +21,7 @@ final class StorageManager {
     
     public typealias UploadPictureCompetion = (Result<String, Error>) -> Void
     
-     // MARK: - UPLOAD PICTURE TO FIREBASE
+     // MARK: - UPLOAD PROFILE PICTURE TO FIREBASE
     public func uploadProfilePicture(with data: Data ,
                                      fileName: String,
                                      completion : @escaping UploadPictureCompetion){
@@ -46,6 +46,32 @@ final class StorageManager {
             })
         })
     }
+    
+    // MARK: - UPLOAD MESSAGE PICTURE TO FIREBASE
+   public func uploadMessagePicture(with data: Data ,
+                                    fileName: String,
+                                    completion : @escaping UploadPictureCompetion){
+       storage.child("message_images/\(fileName)").putData(data,metadata: nil, completion: { metadata, error in
+           guard error == nil else {
+               //failed
+               print("failed to upload data to firebase for picture")
+               completion(.failure(StorageErrors.failedToUpload))
+               return
+           }
+           
+           self.storage.child("message_images/\(fileName)").downloadURL(completion: { url, error in
+               guard let url = url else {
+                   print("Failed to get download url")
+                   completion(.failure(StorageErrors.failedToGetDownloadUrl))
+                   return
+               }
+               
+               let urlString = url.absoluteString
+               print("download url returnned : \(urlString)")
+               completion(.success(urlString))
+           })
+       })
+   }
     
     public enum StorageErrors: Error {
             case failedToUpload
